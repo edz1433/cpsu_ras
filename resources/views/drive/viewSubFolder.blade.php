@@ -121,7 +121,7 @@
                                                 <div class="file-thumbnail text-center">
                                                     {!! customGetFileIcon($doc->file_ext) !!}
                                                 </div>
-                                                <p class="file-name ml-2 mb-0">{{ $doc->file }}</p>
+                                                <p class="file-name ml-2 mb-0">{{ substr($doc->file, strpos($doc->file, '_') + 1) }}</p>
                                             </div>
                                         </td>
                                         <td><i class="fas fa-circle-user fa-1x"></i>@if($doc->user_id == $uid) me @else {{ ucfirst(strtolower($doc->fname)) }} {{ ucfirst(strtolower($doc->lname)) }}                                                @endif</td>
