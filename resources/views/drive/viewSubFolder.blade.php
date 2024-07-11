@@ -67,29 +67,31 @@
                 <hr>
             @endif
                 @php
-                    function customGetFileIcon($filesext)
-                    {
-                        $icons = [
-                            'pdf' => 'fa-file-pdf text-danger',
-                            'doc' => 'fa-file-word text-primary',
-                            'docx' => 'fa-file-word text-primary',
-                            'xls' => 'fa-file-excel text-success',
-                            'xlsx' => 'fa-file-excel text-success',
-                            'ppt' => 'fa-file-powerpoint text-warning',
-                            'pptx' => 'fa-file-powerpoint text-warning',
-                            'zip' => 'fa-file-archive text-secondary',
-                            'rar' => 'fa-file-archive text-secondary',
-                            'png' => 'fa-file-image text-info',
-                            'jpg' => 'fa-file-image text-info',
-                            'jpeg' => 'fa-file-image text-info',
-                            'gif' => 'fa-file-image text-info',
-                            'txt' => 'fa-file-alt text-dark',
-                            'default' => 'fa-file text-muted',
-                        ];
-                    
-                        $iconClass = $icons[$filesext] ?? $icons['default'];
-                    
-                        return '<i class="fas ' . $iconClass . ' fa-2x"></i>'; 
+                    if (!function_exists('customGetFileIcon')) {
+                        function customGetFileIcon($filesext)
+                        {
+                            $icons = [
+                                'pdf' => 'fa-file-pdf text-danger',
+                                'doc' => 'fa-file-word text-primary',
+                                'docx' => 'fa-file-word text-primary',
+                                'xls' => 'fa-file-excel text-success',
+                                'xlsx' => 'fa-file-excel text-success',
+                                'ppt' => 'fa-file-powerpoint text-warning',
+                                'pptx' => 'fa-file-powerpoint text-warning',
+                                'zip' => 'fa-file-archive text-secondary',
+                                'rar' => 'fa-file-archive text-secondary',
+                                'png' => 'fa-file-image text-info',
+                                'jpg' => 'fa-file-image text-info',
+                                'jpeg' => 'fa-file-image text-info',
+                                'gif' => 'fa-file-image text-info',
+                                'txt' => 'fa-file-alt text-dark',
+                                'default' => 'fa-file text-muted',
+                            ];
+                        
+                            $iconClass = $icons[$filesext] ?? $icons['default'];
+                        
+                            return '<i class="fas ' . $iconClass . ' fa-2x"></i>'; 
+                        }
                     }
                 @endphp
                 <div id="dropArea">
