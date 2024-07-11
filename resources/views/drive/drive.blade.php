@@ -39,7 +39,7 @@
                                 <span class="folder-name">{{ $folder->folder_name }}</span>
                             </a>
                             @if(auth()->user()->role !== "Staff")
-                                <div class="folder-options">
+                                <div class="folder-options" @if($folder->folder_name == "Archive" && auth()->user()->role != "Administrator") hidden @endif>
                                     <div class="dropdown">
                                         <i class="fas fa-ellipsis-v" id="folderOptionsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
                                         <div class="dropdown-menu" aria-labelledby="folderOptionsDropdown">

@@ -26,8 +26,8 @@
                                 <table class="table table" id="table-logs">
                                     <thead>
                                         <tr>
-                                            <th>Details</th>
-                                            <th>Timestamp</th>
+                                            <th>logs</th>
+                                            <th>Date Time</th>
                                         </tr>
                                     </thead>
                                     <tbody>

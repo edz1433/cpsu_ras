@@ -1,6 +1,4 @@
 @php $curr_route = request()->route()->getName(); @endphp
-
-
 <script>
     function confirmDelete(id) {
         var url = "{{ route('delete-folder', ['id' => ':id']) }}";

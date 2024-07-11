@@ -103,7 +103,7 @@ class DocumentController extends Controller
     
         return redirect()->back()->with('success', 'File name updated successfully.');
 
-    }
+    }    
 
     public function deleteFile($id)
     {

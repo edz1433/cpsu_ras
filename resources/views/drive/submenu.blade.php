@@ -5,7 +5,12 @@
     <div class="dropdown-menu w-100">
         @if(Route::currentRouteName() == 'drive' || Route::currentRouteName() == 'sub-folder') 
             @if(auth()->user()->role != "Staff") 
-            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#createFolderModal">Create Folder</a>
+                @if(request()->is('drive') && auth()->user()->role == "Administrator")
+                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#createFolderModal">Create Folder</a>
+                @endif
+                @if(request()->is('drive/*'))
+                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#createFolderModal">Create Folder</a>
+                @endif
             @endif
             @if(Route::currentRouteName() == 'sub-folder') 
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#uploadFileModal">Upload File</a>
