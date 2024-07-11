@@ -41,7 +41,7 @@ class MasterController extends Controller
     {
         $camp = Campus::all();
 
-        $user = User::join('cpsupms.campuses', 'users.campus_id', '=', 'campuses.id')
+        $user = User::join('campuses', 'users.campus_id', '=', 'campuses.id')
             ->select('users.id as uid', 'users.*', 'campuses.*')
             ->where('role', '!=', 'Staff')
             ->get();
