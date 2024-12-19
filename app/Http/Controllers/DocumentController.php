@@ -14,9 +14,9 @@ class DocumentController extends Controller
       
         $process = isset($request->process) ? $request->process : '';
 
-        $request->validate([
-            'file' => 'required',
-        ]);
+        // $request->validate([
+        //     'file' => 'required',
+        // ]);
     
         $user_id = auth()->user()->id;
       
