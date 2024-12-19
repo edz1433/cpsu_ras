@@ -40,6 +40,7 @@ class DocumentFolderController extends Controller
         return redirect()->back()->with('success', 'Folder created successfully.');
     }
     
+    
     public function updateFolder(Request $request)
     {
         $request->validate([

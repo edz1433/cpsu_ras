@@ -1,88 +1,84 @@
-    .card-body.folder-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        grid-gap: 20px;
-    }
+.card-body.folder-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two columns */
+    grid-gap: 20px; /* Space between items */
+    max-height: 125px; /* Adjust to show only two rows */
+    overflow-y: auto; /* Enable vertical scrolling */
+    padding: 10px; /* Add some padding for aesthetics */
+}
 
-    .folder-item {
-        position: relative;
-        text-align: left;
-        padding: 5px;
-        border: 1px solid #ddd;
-        border-radius: 3px;
-        background-color: #fff;
-        transition: transform 0.3s ease-in-out;
-        width: 100%; 
-        max-width: 300px; 
-        display: flex;
-        justify-content: space-between;
-    }
+.folder-item {
+    position: relative;
+    text-align: left;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    background-color: #fff;
+    transition: transform 0.3s ease-in-out;
+    width: 100%; 
+    max-width: 100%; /* Ensure it fills the column */
+    display: flex;
+    justify-content: space-between;
+}
 
-    .folder-items {
-        position: relative;
-        text-align: left;
-        padding: 5px;
-        border: 1px solid #ddd;
-        border-radius: 3px;
-        background-color: #fff;
-        transition: transform 0.3s ease-in-out;
-        width: 100%; 
-        max-width: 300px; 
-        display: flex;
-        justify-content: space-between;
-    }
+.folder-items {
+    position: relative;
+    text-align: left;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    background-color: #fff;
+    transition: transform 0.3s ease-in-out;
+    width: 100%; 
+    max-width: 100%; /* Ensure it fills the column */
+    display: flex;
+    justify-content: space-between;
+}
 
-    .folder-content {
-        display: flex;
-        align-items: center;
-    }
+.folder-content {
+    display: flex;
+    align-items: center;
+}
 
-    .folder-icon {
-        font-size: 25px;
-        color: #187744;
-        margin-right: 10px;
-    }
+.folder-icon {
+    font-size: 25px;
+    color: #187744;
+    margin-right: 10px;
+}
 
-    .fa-ellipsis-v{
-        font-size: 18px;
-        margin-top: 6px;
-    }
+.fa-ellipsis-v {
+    font-size: 18px;
+    margin-top: 6px;
+}
 
-    .folder-name {
-        font-size: 20px;
-        color: #333;
-    }
+.folder-name {
+    font-size: 20px;
+    color: #333;
+}
 
-    .folder-options {
-        color: #888;
-        cursor: pointer;
-    }
+.folder-options {
+    color: #888;
+    cursor: pointer;
+}
 
-    .no-folders {
-        text-align: center;
-        font-size: 18px;
-        color: #777;
-        margin-top: 20px;
-    }
-    .folder-item {
-        position: relative;
-    }
+.no-folders {
+    text-align: center;
+    font-size: 18px;
+    color: #777;
+    margin-top: 20px;
+}
 
-    .folder-items {
-        position: relative;
-    }
+.folder-icon::before {
+    content: '\f07b'; 
+    font-family: 'FontAwesome';
+    transition: transform 0.6s ease-in-out;
+    display: block;
+}
 
-    .folder-icon::before {
-        content: '\f07b'; 
-        font-family: 'FontAwesome';
-        transition: transform 0.6s ease-in-out;
-        display: block;
-    }
+.folder-item:hover .folder-icon::before {
+    content: '\f07c'; 
+}
 
-    .folder-item:hover .folder-icon::before {
-        content: '\f07c'; 
-    }
-
-    .folder-item:hover .file-icon::before {
-        opacity: 1;
-    }
+.folder-item:hover .file-icon::before {
+    opacity: 1;
+}

@@ -138,74 +138,80 @@
             var file = fileInput.files[0];
 
             if (file) {
-                if (file.type !== 'application/pdf') {
-                    toastr.options = {
-                        "closeButton": true,
-                        "progressBar": true,
-                        'positionClass': 'toast-bottom-right'
-                    }
-                    toastr.error("Only PDF files are allowed.");
-                }
-
-                if (file.size > 5 * 1024 * 1024) {
-                    toastr.options = {
-                        "closeButton": true,
-                        "progressBar": true,
-                        'positionClass': 'toast-bottom-right'
-                    }
-                    toastr.error("File size must be less than or equal to 5 MB.");
-                }
-
-                var formData = new FormData();
-                formData.append('file', file);
-                $.ajax({
-                    type: 'POST',
-                    url: '{{ route("document-store", $id) }}',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function (data) {
-                        handleResponse(data, true);
-                    }
-                });
-            }
+        // Check allowed file types (PDF, Word, Excel)
+        var allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+        if (!allowedTypes.includes(file.type)) {
+            toastr.options = {
+                "closeButton": true,
+                "progressBar": true,
+                'positionClass': 'toast-bottom-right'
+            };
+            toastr.error("Only PDF, Word, and Excel files are allowed.");
+            return;
         }
-    });
+
+        // Uncomment if you want to add file size validation
+        // if (file.size > 5 * 1024 * 1024) {
+        //     toastr.options = {
+        //         "closeButton": true,
+        //         "progressBar": true,
+        //         'positionClass': 'toast-bottom-right'
+        //     };
+        //     toastr.error("File size must be less than or equal to 5 MB.");
+        //     return;
+        // }
+
+        var formData = new FormData();
+        formData.append('file', file);
+        $.ajax({
+            type: 'POST',
+            url: '{{ route("document-store", $id) }}',
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (data) {
+                handleResponse(data, true);
+            }
+        });
+    }
+}
 </script>
 
 
 <script>
     function validateAndSubmit() {
-        var fileInput = document.getElementById('file');
-        var file = fileInput.files[0];
+    var fileInput = document.getElementById('file');
+    var file = fileInput.files[0];
 
-        if (file) {
-            if (file.type !== 'application/pdf') {
-                toastr.options = {
-                    "closeButton": true,
-                    "progressBar": true,
-                    'positionClass': 'toast-bottom-right'
-                }
-                toastr.error("Only PDF files are allowed.");
-                return; 
-            }
-
-            if (file.size > 5 * 1024 * 1024) {
-                toastr.options = {
-                    "closeButton": true,
-                    "progressBar": true,
-                    'positionClass': 'toast-bottom-right'
-                }
-                toastr.error("File size must be less than or equal to 5 MB.");
-                return;
-            }
-
-            document.getElementById('uploadForm').submit();
+    if (file) {
+        // Check allowed file types (PDF, Word, Excel)
+        var allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+        if (!allowedTypes.includes(file.type)) {
+            toastr.options = {
+                "closeButton": true,
+                "progressBar": true,
+                'positionClass': 'toast-bottom-right'
+            };
+            toastr.error("Only PDF, Word, and Excel files are allowed.");
+            return;
         }
+
+        if (file.size > 5 * 1024 * 1024) {
+            toastr.options = {
+                "closeButton": true,
+                "progressBar": true,
+                'positionClass': 'toast-bottom-right'
+            };
+            toastr.error("File size must be less than or equal to 5 MB.");
+            return;
+        }
+
+        document.getElementById('uploadForm').submit();
     }
+}
 </script>
 @endif 
 

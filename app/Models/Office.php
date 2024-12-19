@@ -9,6 +9,6 @@ class Office extends Model
 {
     use HasFactory;
     
-    protected $fillable = ['office_name', 'office_abbr', 'office_head_id', 'group_by'];
+    protected $fillable = ['office_name', 'office_abbr'];
 
 }

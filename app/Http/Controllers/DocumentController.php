@@ -15,7 +15,7 @@ class DocumentController extends Controller
         $process = isset($request->process) ? $request->process : '';
 
         $request->validate([
-            'file' => 'required|mimes:pdf|max:3072',
+            'file' => 'required|mimes:doc,docx,xlsx',
         ]);
     
         $user_id = auth()->user()->id;
@@ -23,11 +23,13 @@ class DocumentController extends Controller
         $folder = DocuFolder::find($id);
     
         $file = $request->file('file');
+  
         $originalFileName = $file->getClientOriginalName();
     
         do {
             $randomNumber = str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT);
     
+            //$fileName = $randomNumber . '_' . $originalFileName;
             $fileName = $randomNumber . '_' . $originalFileName;
     
             $filePath = public_path($folder->folder_path . '/' . $fileName);
@@ -37,7 +39,8 @@ class DocumentController extends Controller
             'user_id' => $user_id,
             'folder_id' => $id,
             'file' => $fileName,
-            'file_ext' => 'pdf',
+            'file_ext' => $file->getClientOriginalExtension(),
+            'doc_stat' => 'en route',
         ]);
     
         $file->move(public_path($folder->folder_path), $fileName);
@@ -56,6 +59,7 @@ class DocumentController extends Controller
             return response()->json(['success' => 'File uploaded successfully.']);
         }
     } 
+
 
     public function updateFile(Request $request)
     {

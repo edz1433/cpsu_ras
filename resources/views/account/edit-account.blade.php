@@ -134,6 +134,35 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="form-group">
+                                    <div class="form-row">
+                                        <div class="col-md-4">
+                                            <label for="exampleInputName">Department:</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        <i class="fas fa-user"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" name="Department" value="{{ $accounts->office_id }}" placeholder="Enter Contact number" class="form-control" autocomplete="off">
+                                            </div>    
+                                            <span id="error" style="color: #FF0000; font-size: 10pt;" class="form-text text-left Username_error"></span>
+                                        </div>
+                                         <div class="col-md-4">
+                                            <label for="exampleInputName">Contact no:</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        <i class="fas fa-user"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="number" name="ContactNo" value="{{ $accounts->contact_no }}" placeholder="Enter Contact number" class="form-control" autocomplete="off">
+                                            </div>    
+                                            <span id="error" style="color: #FF0000; font-size: 10pt;" class="form-text text-left FirstName_error"></span>
+                                        </div>
+                                    </div> 
+                                </div>
                                 
                                 <div class="form-group">
                                     <div class="form-row">

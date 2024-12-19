@@ -9,5 +9,12 @@ class Document extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'folder_id', 'file', 'file_ext'];
+    protected $fillable = ['user_id', 'folder_id', 'file', 'file_ext', 'doc_stat'];
+
+    public function folder()
+{
+    return $this->belongsTo(DocuFolder::class, 'folder_id');
 }
+
+}
+

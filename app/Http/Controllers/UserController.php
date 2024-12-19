@@ -22,9 +22,9 @@ class UserController extends Controller
             'Username'=>'required|unique:users',
             'Password'=>'required',
             'Role'=>'required',
+            'ContactNo' => 'required',
         ]);
 
-        
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator);
@@ -41,6 +41,7 @@ class UserController extends Controller
                 'username'=>$request->input('Username'),
                 'password'=>$password,
                 'role'=>$request->input('Role'),
+                'contact_no'=>$request->input('ContactNo'),
             ]);
 
             if (!empty($module)) {
@@ -54,11 +55,13 @@ class UserController extends Controller
     public function uEdit($id){
         $camp = Campus::all();
         $user = User::join('campuses', 'users.campus_id', '=', 'campuses.id')
-        ->select('users.id as uid', 'users.*', 'campuses.*')
+        ->join('offices', 'users.office_id', '=', 'offices.id')
+        ->select('users.id as uid', 'users.*', 'campuses.*','offices.office_abbr','users.office_id','users.contact_no')
         ->where('users.role', '!=', 'Staff')
         ->get();
         $uEdit = User::join('campuses', 'users.campus_id', '=', 'campuses.id')
-        ->select('users.id as uid', 'users.*', 'campuses.*')
+        ->join('offices', 'users.office_id', '=', 'offices.id')
+        ->select('users.id as uid', 'users.*', 'campuses.*','offices.office_abbr','users.office_id','users.contact_no')
         ->where('users.id', $id) 
         ->first();
 
@@ -77,6 +80,8 @@ class UserController extends Controller
             'LastName' => 'required',
             'Username' => 'required|unique:users,username,' . $id . ',id',
             'Role' => 'required',
+            'ContactNo' => 'required',
+
         ]);
 
         if ($validator->fails()) {
@@ -93,6 +98,8 @@ class UserController extends Controller
             $user->lname = $request->input('LastName');
             $user->username = $request->input('Username');
             $user->role = $request->input('Role');
+            $user->contact_no = $request->input('ContactNo');
+
             
             if ($request->has('Password')) {
                 $user->password = Hash::make($request->input('Password'));

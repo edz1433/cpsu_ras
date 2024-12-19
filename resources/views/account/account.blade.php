@@ -7,7 +7,7 @@
 <div class="container-fluid">
     <div class="row" style="padding-top: 100px;">
         <div class="col-lg-2">
-            @include('drive.submenu');
+            @include('drive.submenu')
         </div>
         <div class="col-lg-10">
             <div class="card card-success card-outline">

@@ -21,7 +21,7 @@
                     @foreach($connFolders as $connFolder)
                         <li class="breadcrumb-item"><a href="{{ route('sub-folder', $connFolder->id) }}">{{ $connFolder->folder_name }}</a></li>
                     @endforeach
-                    <li class="breadcrumb-item active" aria-current="page">{{ $folder->folder_name }}</li>
+                    <li class="breadcrumb-item active" aria-current="page"><a href="{{ route('drive') }}"></a> {{ $folder->folder_name }}</li>
                 </ol>
             </nav>
             @php $connfold = $folder->connected_folder; @endphp 
@@ -99,8 +99,8 @@
                         <div class="card-header">
                             <h3 class="card-title"></h3>
                             <div class="card-tools">
-                                <div class="input-group input-group-sm" style="width: 150px;">
-                                    <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+                                <div class="input-group input-group-sm" style="width: 350px;">
+                                    <input type="text" name="table_search" class="form-control float-right" placeholder="Search Documents here">
                                     <div class="input-group-append">
                                         <button type="submit" class="btn btn-default">
                                         <i class="fas fa-search"></i>
@@ -122,10 +122,18 @@
                                                     {!! customGetFileIcon($doc->file_ext) !!}
                                                 </div>
                                                 <p class="file-name ml-2 mb-0">{{ substr($doc->file, strpos($doc->file, '_') + 1) }}</p>
+                                               <!--<p class="file-name ml-2 mb-0">{{ substr($doc->file, 6) }}</p>-->
                                             </div>
                                         </td>
-                                        <td><i class="fas fa-circle-user fa-1x"></i>@if($doc->user_id == $uid) me @else {{ ucfirst(strtolower($doc->fname)) }} {{ ucfirst(strtolower($doc->lname)) }}                                                @endif</td>
+                                        <td style="color:grey;"><i class="fas fa-circle-user fa-1x"></i>@if($doc->user_id == $uid) me @else {{ ucfirst(strtolower($doc->fname)) }} {{ ucfirst(strtolower($doc->lname)) }}                                          @endif</td>
                                         <td>
+                                        @if ($doc->folder_id == 61)
+                                        <p class="text-info">
+                                            <i class="fa fa-archive"></i> {{ $doc->folder ? $doc->folder->folder_name : '' }}
+                                        </p>
+                                        @endif
+                                        </td>
+                                        <td style="color:grey;">
                                             @php 
                                             $dateString = $doc->created_at;
                                                 $dateTime = new DateTime($dateString);
@@ -166,7 +174,7 @@
                                 <img src="{{ asset('Uploads/pdf logo.png') }}" width="600" alt="" srcset="">
                             </div>
                         @endif
-                            <input type="file" id="fileInput" accept=".pdf" style="display: none;">
+                            <input type="file" id="fileInput" style="display: none;">
                     </div>
                 </div>
             </div>

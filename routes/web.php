@@ -10,6 +10,7 @@ use App\Http\Controllers\DocumentFolderController;
 use App\Http\Controllers\DriveAccountController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\LogController;
+use App\Http\Controllers\SampleController;
 use App\Http\Middleware\NoCacheMiddleware;
 
 /*
@@ -35,6 +36,9 @@ Route::get('/', function () {
 Route::get('/login',[LoginAuthController::class,'getLogin'])->name('getLogin')->middleware([NoCacheMiddleware::class]);
 Route::post('/login',[LoginAuthController::class,'postLogin'])->name('postLogin');
 Route::get('/update-pass', [EmployeeController::class, 'updateEmployeePasswords']);
+Route::get('/sample', [SampleController::class, 'readSample'])->name('sam');
+Route::post('/sample/create', [SampleController::class, 'createSample'])->name('create');
+
 Route::group(['middleware'=>['login_auth', NoCacheMiddleware::class]],function(){
     
     Route::get('/dashboard',[MasterController::class,'dashboard'])->name('dashboard');
@@ -43,7 +47,7 @@ Route::group(['middleware'=>['login_auth', NoCacheMiddleware::class]],function()
     Route::get('/drive',[MasterController::class,'drive'])->name('drive');
     Route::get('/account',[DriveAccountController::class,'driveAccount'])->name('drive-account');
     Route::get('/account/create',[DriveAccountController::class,'createAccount'])->name('create-account');  
-    Route::get('/account/edit/{id}',[DriveAccountController::class,'editAccount'])->name('edit-account'); 
+    Route::get('/account/{id}',[DriveAccountController::class,'editAccount'])->name('edit-account'); 
     Route::get('/drive/{id}', [DocumentFolderController::class, 'subFolder'])->name('sub-folder');
 
     Route::post('/drive/create-folder', [DocumentFolderController::class, 'createFolder'])->name('create-folder');
@@ -64,7 +68,7 @@ Route::group(['middleware'=>['login_auth', NoCacheMiddleware::class]],function()
     //User
     Route::get('/users/ulist',[MasterController::class,'user'])->name('ulist');
     Route::post('/users/uCreate',[UserController::class,'uCreate'])->name('uCreate');
-    Route::get('/users/uEdit/{id}',[UserController::class,'uEdit'])->name('uEdit');
+    Route::get('/users/{id}',[UserController::class,'uEdit'])->name('uEdit');
     Route::post('/users/uUpdate',[UserController::class,'uUpdate'])->name('uUpdate');
     Route::get('/users/uDelete/{id}',[UserController::class,'uDelete'])->name('uDelete');
     
@@ -83,7 +87,7 @@ Route::group(['middleware'=>['login_auth', NoCacheMiddleware::class]],function()
     //Office
     Route::get('/office',[OfficeController::class,'officeList'])->name('officeList');
     Route::post('/office/officeCreate', [OfficeController::class, 'officeCreate'])->name('officeCreate');
-    Route::get('/office/officeEdit/{id}',[OfficeController::class,'officeEdit'])->name('officeEdit');
+    Route::get('/office/{id}',[OfficeController::class,'officeEdit'])->name('officeEdit');
     Route::post('/office/officeUpdate',[OfficeController::class,'officeUpdate'])->name('officeUpdate');
     Route::get('/office/officeDelete{id}',[OfficeController::class,'officeDelete'])->name('officeDelete');
 

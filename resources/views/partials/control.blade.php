@@ -22,6 +22,12 @@
                 </a>
             @endif
             
+            @if(auth()->user()->role == "Administrator") 
+                <a href="{{ route('officeList') }}" class="btn btn-app {{ request()->is('office*') ? 'active' : '' }}">
+                    <i class="fas fa-building"></i> Departments
+                </a>
+            @endif
+
             <a href="" class="btn btn-app {{ request()->is('settings*') ? 'active' : '' }}">
                 <i class="fas fa-gear"></i> Settings
             </a>
