@@ -9,100 +9,56 @@ use App\Models\Log;
 
 class DocumentController extends Controller
 {
-    // public function storeFile(Request $request, $id)
-    // {     
-      
-    //     $process = isset($request->process) ? $request->process : '';
-
-    //     // $request->validate([
-    //     //     'file' => 'required',
-    //     // ]);
-    
-    //     $user_id = auth()->user()->id;
-      
-    //     $folder = DocuFolder::find($id);
-    
-    //     $file = $request->file('file');
-  
-    //     $originalFileName = $file->getClientOriginalName();
-    
-    //     do {
-    //         $randomNumber = str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT);
-    
-    //         //$fileName = $randomNumber . '_' . $originalFileName;
-    //         $fileName = $randomNumber . '_' . $originalFileName;
-    
-    //         $filePath = public_path($folder->folder_path . '/' . $fileName);
-    //     } while (file_exists($filePath));
-    
-    //     $document = Document::create([
-    //         'user_id' => $user_id,
-    //         'folder_id' => $id,
-    //         'file' => $fileName,
-    //         'file_ext' => $file->getClientOriginalExtension(),
-    //         'doc_stat' => 'en route',
-    //     ]);
-    
-    //     $file->move(public_path($folder->folder_path), $fileName);
-
-    //     Log::create([
-    //         'user_id' => $user_id,
-    //         'file_id' => $document->id,
-    //         'action' => 1, 
-    //         'prev_file' => $originalFileName,
-    //         'new_file' => null,
-    //     ]);
-    
-    //     if(!empty($process)){
-    //         return redirect()->back()->with('success', 'File uploaded successfully.');
-    //     }else{
-    //         return response()->json(['success' => 'File uploaded successfully.']);
-    //     }
-    // } 
-
     public function storeFile(Request $request, $id)
-{
-    $process = $request->input('process', '');
-    $user_id = auth()->id();
-    $folder = DocuFolder::findOrFail($id);
+    {     
+      
+        $process = isset($request->process) ? $request->process : '';
 
-    $file = $request->file('file');
-    if (!$file) {
-        return response()->json(['error' => 'No file uploaded.'], 400);
-    }
+        // $request->validate([
+        //     'file' => 'required',
+        // ]);
+    
+        $user_id = auth()->user()->id;
+      
+        $folder = DocuFolder::find($id);
+    
+        $file = $request->file('file');
+  
+        $originalFileName = $file->getClientOriginalName();
+    
+        do {
+            $randomNumber = str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT);
+    
+            //$fileName = $randomNumber . '_' . $originalFileName;
+            $fileName = $randomNumber . '_' . $originalFileName;
+    
+            $filePath = public_path($folder->folder_path . '/' . $fileName);
+        } while (file_exists($filePath));
+    
+        $document = Document::create([
+            'user_id' => $user_id,
+            'folder_id' => $id,
+            'file' => $fileName,
+            'file_ext' => $file->getClientOriginalExtension(),
+            // 'doc_stat' => 'en route',
+        ]);
+    
+        $file->move(public_path($folder->folder_path), $fileName);
 
-    $originalFileName = $file->getClientOriginalName();
-
-    do {
-        $randomNumber = str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT);
-        $fileName = $randomNumber . '_' . $originalFileName;
-        $filePath = public_path($folder->folder_path . '/' . $fileName);
-    } while (file_exists($filePath));
-
-    $document = Document::create([
-        'user_id' => $user_id,
-        'folder_id' => $id,
-        'file' => $fileName,
-        'file_ext' => $file->getClientOriginalExtension(),
-        'doc_stat' => 'en route',
-    ]);
-
-    $file->move(public_path($folder->folder_path), $fileName);
-
-    Log::create([
-        'user_id' => $user_id,
-        'file_id' => $document->id,
-        'action' => 1,
-        'prev_file' => $originalFileName,
-        'new_file' => null,
-    ]);
-
-    if ($process) {
-        return redirect()->back()->with('success', 'File uploaded successfully.');
-    }
-
-    return response()->json(['success' => 'File uploaded successfully.']);
-}
+        Log::create([
+            'user_id' => $user_id,
+            'file_id' => $document->id,
+            'action' => 1, 
+            'prev_file' => $originalFileName,
+            'new_file' => null,
+        ]);
+    
+        if(!empty($process)){
+            return redirect()->back()->with('success', 'File uploaded successfully.');
+        }else{
+            return response()->json(['success' => 'File uploaded successfully.']);
+        }
+    } 
 
 
     public function updateFile(Request $request)

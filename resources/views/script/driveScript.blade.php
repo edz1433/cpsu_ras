@@ -87,25 +87,31 @@
         var dropArea = document.getElementById('dropArea');
 
         // Prevent default behavior on drag and drop events
-        ['dragover', 'dragleave', 'drop'].forEach(eventType => {
-            dropArea.addEventListener(eventType, function (e) {
-                e.preventDefault();
-                e.stopPropagation();
-                if (eventType === 'dragover') {
-                    dropArea.classList.add('dragover');
-                } else {
-                    dropArea.classList.remove('dragover');
-                }
-            });
+        dropArea.addEventListener('dragover', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            dropArea.classList.add('dragover');
+        });
+
+        dropArea.addEventListener('dragleave', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            dropArea.classList.remove('dragover');
         });
 
         dropArea.addEventListener('drop', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            dropArea.classList.remove('dragover');
+
             var files = e.dataTransfer.files;
+
             if (files.length > 0) {
                 uploadFiles(files);
             }
         });
 
+        // Trigger file upload when files are selected from the input field
         $('#fileInput').change(function () {
             var files = this.files;
             if (files.length > 0) {
@@ -113,42 +119,52 @@
             }
         });
 
+        // Handle responses from the server
         function handleResponse(data, isSuccessful) {
             toastr.options = {
                 "closeButton": true,
                 "progressBar": true,
                 'positionClass': 'toast-bottom-right'
             };
+
             if (isSuccessful) {
                 toastr.success(data.success);
                 setTimeout(() => location.reload(), 1000);
             } else {
+                console.error(data.responseText);
                 toastr.error(data.responseJSON?.error || 'An error occurred. Please try again.');
             }
         }
 
+        // Upload multiple files using AJAX
         function uploadFiles(files) {
             Array.from(files).forEach(function (file) {
-                const allowedTypes = [
+                // Validate file type (PDF, Word, Excel)
+                console.log('File type:', file.type);
+
+                var allowedTypes = [
                     'application/pdf',
                     'application/msword',
                     'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    'application/octet-stream'
                 ];
 
                 if (!allowedTypes.includes(file.type)) {
+                    toastr.options = {
+                        "closeButton": true,
+                        "progressBar": true,
+                        'positionClass': 'toast-bottom-right'
+                    };
                     toastr.error(`Invalid file type: ${file.name}`);
                     return;
                 }
 
-                if (file.size > 5 * 1024 * 1024) { // 5 MB limit
-                    toastr.error(`File size exceeds 5 MB: ${file.name}`);
-                    return;
-                }
-
+                // Prepare form data for each file
                 var formData = new FormData();
                 formData.append('file', file);
 
+                // Send AJAX request for each file
                 $.ajax({
                     type: 'POST',
                     url: '{{ route("document-store", $id) }}',
@@ -168,29 +184,44 @@
             });
         }
     });
-
-    function validateAndSubmit() {
-        var fileInput = document.getElementById('file');
-        var file = fileInput.files[0];
-
-        if (file) {
-            var allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
-            if (!allowedTypes.includes(file.type)) {
-                toastr.error("Only PDF, Word, and Excel files are allowed.");
-                return;
-            }
-
-            if (file.size > 5 * 1024 * 1024) {
-                toastr.error("File size must be less than or equal to 5 MB.");
-                return;
-            }
-
-            document.getElementById('uploadForm').submit();
-        }
-    }
 </script>
-@endif
 
+
+
+
+<script>
+    function validateAndSubmit() {
+    var fileInput = document.getElementById('file');
+    var file = fileInput.files[0];
+
+    if (file) {
+        // Check allowed file types (PDF, Word, Excel)
+        var allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+        if (!allowedTypes.includes(file.type)) {
+            toastr.options = {
+                "closeButton": true,
+                "progressBar": true,
+                'positionClass': 'toast-bottom-right'
+            };
+            toastr.error("Only PDF, Word, and Excel files are allowed.");
+            return;
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+            toastr.options = {
+                "closeButton": true,
+                "progressBar": true,
+                'positionClass': 'toast-bottom-right'
+            };
+            toastr.error("File size must be less than or equal to 5 MB.");
+            return;
+        }
+
+        document.getElementById('uploadForm').submit();
+    }
+}
+</script>
+@endif 
 
 
 <script>
