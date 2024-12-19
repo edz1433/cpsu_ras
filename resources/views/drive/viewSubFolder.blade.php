@@ -61,7 +61,7 @@
                         @endif
                     </div>
                 @empty
-                    <div class="no-folders">No folders foundsss..</div>
+                    <div class="no-folders">No folders found..</div>
                 @endforelse
             </div> 
                 <hr>
