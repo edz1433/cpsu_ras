@@ -86,36 +86,40 @@
     document.addEventListener('DOMContentLoaded', function () {
         var dropArea = document.getElementById('dropArea');
 
+        // Prevent default behavior on drag and drop events
         dropArea.addEventListener('dragover', function (e) {
             e.preventDefault();
+            e.stopPropagation();
             dropArea.classList.add('dragover');
         });
 
-        dropArea.addEventListener('dragleave', function () {
+        dropArea.addEventListener('dragleave', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
             dropArea.classList.remove('dragover');
         });
 
         dropArea.addEventListener('drop', function (e) {
             e.preventDefault();
+            e.stopPropagation();
             dropArea.classList.remove('dragover');
 
-            var fileInput = document.getElementById('fileInput');
             var files = e.dataTransfer.files;
 
             if (files.length > 0) {
-                fileInput.files = files;
-                uploadFile();
+                uploadFiles(files);
             }
         });
 
-        // dropArea.addEventListener('click', function () {
-        //     document.getElementById('fileInput').click();
-        // });
-
+        // Trigger file upload when files are selected from the input field
         $('#fileInput').change(function () {
-            uploadFile();
+            var files = this.files;
+            if (files.length > 0) {
+                uploadFiles(files);
+            }
         });
 
+        // Handle responses from the server
         function handleResponse(data, isSuccessful) {
             toastr.options = {
                 "closeButton": true,
@@ -132,53 +136,57 @@
             }
         }
 
+        // Upload multiple files using AJAX
+        function uploadFiles(files) {
+            Array.from(files).forEach(function (file) {
+                // Validate file type (PDF, Word, Excel)
+                console.log('File type:', file.type);
 
-        function uploadFile() {
-            var fileInput = $('#fileInput')[0];
-            var file = fileInput.files[0];
+                var allowedTypes = [
+                    'application/pdf',
+                    'application/msword',
+                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    'application/octet-stream'
+                ];
 
-            if (file) {
-        // Check allowed file types (PDF, Word, Excel)
-        var allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
-        if (!allowedTypes.includes(file.type)) {
-            toastr.options = {
-                "closeButton": true,
-                "progressBar": true,
-                'positionClass': 'toast-bottom-right'
-            };
-            toastr.error("Only PDF, Word, and Excel files are allowed.");
-            return;
+                if (!allowedTypes.includes(file.type)) {
+                    toastr.options = {
+                        "closeButton": true,
+                        "progressBar": true,
+                        'positionClass': 'toast-bottom-right'
+                    };
+                    toastr.error(`Invalid file type: ${file.name}`);
+                    return;
+                }
+
+                // Prepare form data for each file
+                var formData = new FormData();
+                formData.append('file', file);
+
+                // Send AJAX request for each file
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ route("document-store", $id) }}',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (data) {
+                        handleResponse(data, true);
+                    },
+                    error: function (data) {
+                        handleResponse(data, false);
+                    }
+                });
+            });
         }
-
-        // Uncomment if you want to add file size validation
-        // if (file.size > 5 * 1024 * 1024) {
-        //     toastr.options = {
-        //         "closeButton": true,
-        //         "progressBar": true,
-        //         'positionClass': 'toast-bottom-right'
-        //     };
-        //     toastr.error("File size must be less than or equal to 5 MB.");
-        //     return;
-        // }
-
-        var formData = new FormData();
-        formData.append('file', file);
-        $.ajax({
-            type: 'POST',
-            url: '{{ route("document-store", $id) }}',
-            data: formData,
-            contentType: false,
-            processData: false,
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function (data) {
-                handleResponse(data, true);
-            }
-        });
-    }
-}
+    });
 </script>
+
+
 
 
 <script>

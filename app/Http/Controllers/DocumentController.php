@@ -15,7 +15,7 @@ class DocumentController extends Controller
         $process = isset($request->process) ? $request->process : '';
 
         $request->validate([
-            'file' => 'required|mimes:doc,docx,xlsx',
+            'file' => 'required|mimes:doc,docx,xlsx,pdf',
         ]);
     
         $user_id = auth()->user()->id;
