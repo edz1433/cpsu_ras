@@ -143,6 +143,9 @@
                 console.log('File type:', file.type);
 
                 var allowedTypes = [
+                    'image/jpeg',
+                    'image/jpg',
+                    'image/png',
                     'application/pdf',
                     'application/msword',
                     'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -196,7 +199,9 @@
 
     if (file) {
         // Check allowed file types (PDF, Word, Excel)
-        var allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+        var allowedTypes = ['image/jpeg',
+                    'image/jpg',
+                    'image/png','application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
         if (!allowedTypes.includes(file.type)) {
             toastr.options = {
                 "closeButton": true,
@@ -207,15 +212,15 @@
             return;
         }
 
-        if (file.size > 5 * 1024 * 1024) {
-            toastr.options = {
-                "closeButton": true,
-                "progressBar": true,
-                'positionClass': 'toast-bottom-right'
-            };
-            toastr.error("File size must be less than or equal to 5 MB.");
-            return;
-        }
+        // if (file.size > 5 * 1024 * 1024) {
+        //     toastr.options = {
+        //         "closeButton": true,
+        //         "progressBar": true,
+        //         'positionClass': 'toast-bottom-right'
+        //     };
+        //     toastr.error("File size must be less than or equal to 5 MB.");
+        //     return;
+        // }
 
         document.getElementById('uploadForm').submit();
     }
