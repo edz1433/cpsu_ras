@@ -26,7 +26,7 @@
             </nav>
             @php $connfold = $folder->connected_folder; @endphp 
             @if($subfolder)
-            <div class="card-body folder-grid" style="padding-bottom:39%;">
+            <div class="card-body folder-grid" style="padding-bottom:40%;">
                 @php
                     $userid = auth()->user()->id;
                 @endphp
@@ -66,7 +66,7 @@
             </div> 
                 <hr>
             @endif
-                {{-- @php
+                @php
                     if (!function_exists('customGetFileIcon')) {
                         function customGetFileIcon($filesext)
                         {
@@ -173,7 +173,7 @@
                             <div class="container text-center">
                                 <img src="{{ asset('Uploads/pdf logo.png') }}" width="600" alt="" srcset="">
                             </div>
-                        @endif--}}
+                        @endif
                             <input type="file" id="fileInput" style="display: none;">
                     </div>
                 </div>
