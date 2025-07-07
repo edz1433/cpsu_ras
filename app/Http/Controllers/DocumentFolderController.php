@@ -89,34 +89,90 @@ class DocumentFolderController extends Controller
             return redirect()->back()->with('success', 'Folder name is the same, no changes made.');
         }
     }
+    
+// changes on july 7, 2025
+    // public function subfolder($id)
+    // {
+    //     $uid = auth()->user()->id;
+    //     $users = User::where('role', 'Staff');
+    //     $folder = DocuFolder::find($id);
+    //     $connFolder = explode(',', $folder->connected_folder);
+    //     $connFolders = DocuFolder::whereIn('id', $connFolder)->get();
+    //     $subfolder = DocuFolder::where('folder_category', 'subfolder')->where('connected_folder', $id)->get();
+    //     if ($folder->folder_category !== "mainfolder") {
+    //         $subfolder = DocuFolder::where('folder_category', 'subfolder')
+    //         ->whereRaw("SUBSTRING_INDEX(connected_folder, ',', -1) = ?", [$id])
+    //         ->get();
+    //     }
 
-    public function subfolder($id)
-    {
-        $uid = auth()->user()->id;
-        $users = User::where('role', 'Staff');
-        $folder = DocuFolder::find($id);
-        $connFolder = explode(',', $folder->connected_folder);
-        $connFolders = DocuFolder::whereIn('id', $connFolder)->get();
-        $subfolder = DocuFolder::where('folder_category', 'subfolder')->where('connected_folder', $id)->get();
-        if ($folder->folder_category !== "mainfolder") {
-            $subfolder = DocuFolder::where('folder_category', 'subfolder')
+    //     if (!$folder) {
+    //         return abort(404);
+    //     }
+
+    //     $folderPath = public_path($folder->folder_path);
+  
+    //     $documents = Document::select('documents.*', 'users.fname', 'users.lname', 'documents.id AS docid')
+    //     ->where('folder_id', $id)
+    //     ->join('users', 'documents.user_id', '=', 'users.id')
+    //     ->get();
+        
+    //     return view('drive.viewSubFolder', compact('users', 'folder', 'subfolder', 'id', 'connFolders', 'documents', 'uid', 'folderPath'));
+    // }
+
+    // app/Http/Controllers/DocumentFolderController.php
+public function subFolder($id)
+{
+    $uid    = auth()->id();
+    $users  = User::where('role', 'Staff')->get();
+
+    /** ①  fetch the folder or 404 */
+    $folder = DocuFolder::findOrFail($id);
+
+    /** ②  depth of the current folder_path:  "a/b/c" → 3  */
+    $depth  = count(array_filter(explode('/', trim($folder->folder_path, '/'))));
+    $isLeaf = $depth >= 3;            // third “array” reached
+
+    /** ③  any ‘connected’ folders the user may want to display */
+    $connIds     = array_filter(explode(',', $folder->connected_folder ?? ''));
+    $connFolders = $connIds
+                   ? DocuFolder::whereIn('id', $connIds)->get()
+                   : collect();
+
+    /** ④  files inside this folder                */
+    $documents = Document::query()
+        ->select('documents.*', 'users.fname', 'users.lname', 'documents.id AS docid')
+        ->join('users', 'documents.user_id', '=', 'users.id')
+        ->where('folder_id', $id)
+        ->get();
+
+    /** ⑤  only fetch sub‑folders when path depth < 3  */
+    if ($isLeaf) {
+        $subfolder = collect();       // empty collection → nothing will render
+    } else {
+        // original logic for “children”:
+        $subfolder = DocuFolder::where('folder_category', 'subfolder')
             ->whereRaw("SUBSTRING_INDEX(connected_folder, ',', -1) = ?", [$id])
             ->get();
-        }
-
-        if (!$folder) {
-            return abort(404);
-        }
-
-        $folderPath = public_path($folder->folder_path);
-  
-        $documents = Document::select('documents.*', 'users.fname', 'users.lname', 'documents.id AS docid')
-        ->where('folder_id', $id)
-        ->join('users', 'documents.user_id', '=', 'users.id')
-        ->get();
-        
-        return view('drive.viewSubFolder', compact('users', 'folder', 'subfolder', 'id', 'connFolders', 'documents', 'uid', 'folderPath'));
     }
+
+    $folderPath = public_path($folder->folder_path);
+
+    return view(
+        'drive.viewSubFolder',
+        compact(
+            'users',
+            'folder',
+            'subfolder',
+            'id',
+            'connFolders',
+            'documents',
+            'uid',
+            'folderPath',
+            'isLeaf'       // pass the flag to Blade (optional)
+        )
+    );
+}
+
     
     public function createSubFolder(Request $request, $id)
     {

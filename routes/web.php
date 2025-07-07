@@ -12,6 +12,8 @@ use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\SampleController;
 use App\Http\Middleware\NoCacheMiddleware;
+use Illuminate\Support\Facades\Auth;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -81,8 +83,8 @@ Route::group(['middleware'=>['login_auth', NoCacheMiddleware::class]],function()
     Route::get('/empDelete/{id}',[EmployeeController::class,'empDelete'])->name('empDelete');
     Route::post('/empPartimeRate',[EmployeeController::class,'empPartimeRate'])->name('empPartimeRate');
 
-    Route::post('/modify/show', [ModifyController::class, 'modifyShow'])->name('modifyShow');
-    Route::post('/modify/update', [ModifyController::class, 'modifyUpdate'])->name('modifyUpdate');
+    // Route::post('/modify/show', [ModifyController::class, 'modifyShow'])->name('modifyShow');
+    // Route::post('/modify/update', [ModifyController::class, 'modifyUpdate'])->name('modifyUpdate');
 
     //Office
     Route::get('/office',[OfficeController::class,'officeList'])->name('officeList');
