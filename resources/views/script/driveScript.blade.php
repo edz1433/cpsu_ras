@@ -138,29 +138,29 @@
 
         // Upload multiple files using AJAX
         function uploadFiles(files) {
+            // Define common video MIME types to exclude
+            const videoTypes = [
+                'video/mp4',
+                'video/webm',
+                'video/ogg',
+                'video/x-msvideo',
+                'video/3gpp',
+                'video/3gpp2',
+                'video/mpeg',
+                'video/quicktime',
+                'video/x-matroska'
+            ];
+
             Array.from(files).forEach(function (file) {
-                // Validate file type (PDF, Word, Excel)
                 console.log('File type:', file.type);
 
-                var allowedTypes = [
-                    'image/jpeg',
-                    'image/jpg',
-                    'image/png',
-                    'application/pdf',
-                    'application/msword',
-                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
-                    'application/vnd.ms-excel', // .xls
-                    'application/octet-stream'
-                ];
-
-                if (!allowedTypes.includes(file.type)) {
+                if (videoTypes.includes(file.type)) {
                     toastr.options = {
                         "closeButton": true,
                         "progressBar": true,
                         'positionClass': 'toast-bottom-right'
                     };
-                    toastr.error(`Invalid file type: ${file.name}`);
+                    toastr.error(`Video files are not allowed: ${file.name}`);
                     return;
                 }
 
@@ -187,46 +187,44 @@
                 });
             });
         }
+
     });
 </script>
 
-
-
-
 <script>
     function validateAndSubmit() {
-    var fileInput = document.getElementById('file');
-    var file = fileInput.files[0];
+        var fileInput = document.getElementById('file');
+        var file = fileInput.files[0];
 
-    if (file) {
-        // Check allowed file types (PDF, Word, Excel)
-        var allowedTypes = ['image/jpeg',
-                    'image/jpg',
-                    'image/png','application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
-        if (!allowedTypes.includes(file.type)) {
-            toastr.options = {
-                "closeButton": true,
-                "progressBar": true,
-                'positionClass': 'toast-bottom-right'
-            };
-            toastr.error("Only PDF, Word, and Excel files are allowed.");
-            return;
+        if (file) {
+            // List of common video MIME types to exclude
+            var videoTypes = [
+                'video/mp4',
+                'video/webm',
+                'video/ogg',
+                'video/x-msvideo',
+                'video/3gpp',
+                'video/3gpp2',
+                'video/mpeg',
+                'video/quicktime',
+                'video/x-matroska'
+            ];
+
+            if (videoTypes.includes(file.type)) {
+                toastr.options = {
+                    "closeButton": true,
+                    "progressBar": true,
+                    "positionClass": "toast-bottom-right"
+                };
+                toastr.error("Video files are not allowed.");
+                return;
+            }
+
+            document.getElementById('uploadForm').submit();
         }
-
-        // if (file.size > 5 * 1024 * 1024) {
-        //     toastr.options = {
-        //         "closeButton": true,
-        //         "progressBar": true,
-        //         'positionClass': 'toast-bottom-right'
-        //     };
-        //     toastr.error("File size must be less than or equal to 5 MB.");
-        //     return;
-        // }
-
-        document.getElementById('uploadForm').submit();
     }
-}
 </script>
+
 @endif 
 
 
