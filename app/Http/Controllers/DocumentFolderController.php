@@ -120,6 +120,7 @@ class DocumentFolderController extends Controller
     // }
 
     // app/Http/Controllers/DocumentFolderController.php
+    
 public function subFolder($id)
 {
     $uid    = auth()->id();
@@ -130,7 +131,7 @@ public function subFolder($id)
 
     /** ②  depth of the current folder_path:  "a/b/c" → 3  */
     $depth  = count(array_filter(explode('/', trim($folder->folder_path, '/'))));
-    $isLeaf = $depth >= 3;            // third “array” reached
+    $isLeaf = $depth >= 10;            // third “array” reached
 
     /** ③  any ‘connected’ folders the user may want to display */
     $connIds     = array_filter(explode(',', $folder->connected_folder ?? ''));
