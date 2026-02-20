@@ -38,7 +38,7 @@
                                 $userid = auth()->user()->id;
                             @endphp
 
-                            @forelse ($subfolder as $folder)
+                           @forelse ($subfolder->sortBy('folder_name') as $folder)
                                 @php
                                     $userarray = explode(',', $folder->user_access);
                                     $checkaccess = !in_array($userid, $userarray);
